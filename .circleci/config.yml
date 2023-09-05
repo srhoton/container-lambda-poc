@@ -18,12 +18,10 @@ jobs:
           dockerfile: Dockerfile
           executors: base
           path: .
-          platform: linux/amd64
+            #platform: linux/amd64
           region: us-west-2
           push_image: true
           tag: << parameters.image_tag >>
-
-            #tag: << parameters.image_tag >>
           
   credential-setup:
     executor: aws-cli/default
