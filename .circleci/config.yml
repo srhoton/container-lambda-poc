@@ -12,11 +12,11 @@ jobs:
       image: ubuntu-2204:2023.07.2
     steps:
       - aws-ecr/build_and_push_image:
-        repo: "container-lambda-poc"
-        tag: << parameters.tag >>
-        profile-name: cli-access
-        dockerfile: Dockerfile
-        path: .
+          repo: "container-lambda-poc"
+          tag: << parameters.tag >>
+          profile-name: cli-access
+          dockerfile: Dockerfile
+          path: .
   credential-setup:
     executor: aws-cli/default
     steps:
