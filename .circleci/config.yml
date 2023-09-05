@@ -10,7 +10,7 @@ jobs:
         default: latest
     steps:
       - aws-ecr/build_and_push_image:
-          account_id: "874500785305"
+          account_id: 874500785305
           auth:
             - aws-cli/setup:
                 profile: OIDC-ECR
@@ -21,7 +21,6 @@ jobs:
           platform: linux/amd64
           region: us-west-2
           push_image: true
-          region: us-west-2
           tag: << parameters.image_tag >>
 
             #tag: << parameters.image_tag >>
