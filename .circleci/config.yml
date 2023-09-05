@@ -3,18 +3,27 @@ orbs:
   aws-cli: circleci/aws-cli@4.1.0
   aws-ecr: circleci/aws-ecr@9.0.0
 jobs:
-  build-docker-image: 
-    machine:
-      image: ubuntu-2004:202101-01
+  build-and-push-docker-image:
+    parameters:
+      image_tag:
+        type: string
+        default: "latest"
+    machine: 
+      image: ubuntu-2204:2023.07.2
     steps:
-      - aws-ecr/build_and_push_image: 
-          attach_workspace: true
-          auth: 
-            - aws-cli/setup: 
-                role_arn: ${AWS_OIDC_ROLE_ARN}
+      - aws-ecr/build_and_push_image:
+          account_id: "874500785305"
+          repo: "container-lambda-poc"
+          tag: << parameters.image_tag >>
+          profile_name: ecr-access
           dockerfile: Dockerfile
-          push_image: true
-          repo: ${AWS_ECR_REPO}
+          path: application
+          region: us-west-2
+          auth:
+            - aws-cli/setup:
+                role_arn: ${AWS_OIDC_ROLE_ARN}
+                region: us-west-2
+                profile_name: ecr-access
   credential-setup:
     executor: aws-cli/default
     steps:
@@ -57,7 +66,9 @@ workflows:
           filters:
             branches:
               only: main
-      - build-docker-image: 
+      - build-and-push-docker-image: 
+          requires: 
+            - credential-setup
           context: Test
           filters:
             branches:
@@ -69,11 +80,14 @@ workflows:
           filters:
             branches:
               ignore: main
-      - build-docker-image: 
+      - build-and-push-docker-image: 
+          requires: 
+            - credential-setup
+          image_tag: << pipeline.git.branch >>
           context: Dev
           filters:
             branches:
-              only: main
+              ignore: main
   on-tag:
     jobs:
       - credential-setup: 
