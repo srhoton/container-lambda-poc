@@ -13,7 +13,7 @@ jobs:
             - aws-cli/setup: 
                 role_arn: ${AWS_OIDC_ROLE_ARN}
           dockerfile: Dockerfile
-          push_image: false
+          push_image: true
           repo: ${AWS_ECR_REPO}
   credential-setup:
     executor: aws-cli/default
@@ -53,6 +53,11 @@ workflows:
   on-merge-to-main:
     jobs:
       - credential-setup: 
+          context: Test
+          filters:
+            branches:
+              only: main
+      - build-docker-image: 
           context: Test
           filters:
             branches:
