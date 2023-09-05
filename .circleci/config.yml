@@ -12,6 +12,7 @@ jobs:
       image: ubuntu-2204:2023.07.2
     steps:
       - aws-ecr/build_and_push_image:
+          account_id: "874500785305"
           repo: "container-lambda-poc"
           tag: << parameters.image_tag >>
           profile_name: ecr-access
