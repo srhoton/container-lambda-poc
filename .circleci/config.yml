@@ -4,6 +4,10 @@ orbs:
   aws-ecr: circleci/aws-ecr@9.0.0
 jobs:
   build-docker-image: 
+    parameters:
+      image_tag:
+        type: string
+        default: latest
     machine:
       image: ubuntu-2004:202101-01
     steps:
@@ -15,6 +19,9 @@ jobs:
           dockerfile: Dockerfile
           push_image: true
           repo: ${AWS_ECR_REPO}
+          region: us-west-2
+          tag: << parameters.image_tag >>
+          
   credential-setup:
     executor: aws-cli/default
     steps:
@@ -70,6 +77,7 @@ workflows:
             branches:
               ignore: main
       - build-docker-image: 
+          image_tag: << pipeline.git.branch >>
           context: Dev
           filters:
             branches:
