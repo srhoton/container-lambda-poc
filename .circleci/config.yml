@@ -8,12 +8,21 @@ jobs:
       image_tag:
         type: string
         default: latest
-    executor: aws-cli/default
     steps:
-      - aws-ecr/ecr_login: 
+      - aws-ecr/build_and_push_image:
           account_id: "874500785305"
-          profile_name: cli-access
+          auth:
+            - aws-cli/setup:
+                profile: OIDC-ECR
+                role_arn: ${AWS_OIDC_ROLE_ARN}
+          dockerfile: Dockerfile
+          executors: base
+          path: .
+          platform: linux/amd64
           region: us-west-2
+          push_image: true
+          region: us-west-2
+          tag: << parameters.image_tag >>
 
             #tag: << parameters.image_tag >>
           
