@@ -8,8 +8,8 @@ jobs:
       image_tag:
         type: string
         default: latest
-    machine:
-      image: ubuntu-2204:2022.07.1
+          #machine:
+          #image: ubuntu-2204:2022.07.1
     steps:
       - aws-ecr/build_image: 
         #attach_workspace: true
