@@ -17,7 +17,7 @@ jobs:
           tag: << parameters.image_tag >>
           profile_name: ecr-access
           dockerfile: Dockerfile
-          path: .
+          path: application
           region: us-west-2
           auth:
             - aws-cli/setup:
