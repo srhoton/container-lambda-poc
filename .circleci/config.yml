@@ -3,23 +3,16 @@ orbs:
   aws-cli: circleci/aws-cli@4.1.0
   aws-ecr: circleci/aws-ecr@9.0.0
 jobs:
-  build-docker-image: 
+  build-and-push-docker-image: 
     parameters:
       image_tag:
         type: string
         default: latest
     executor: aws-cli/default
     steps:
-      - aws-ecr/build_image: 
-        #attach_workspace: true
-            #auth: 
-            #- aws-cli/setup: 
-            #    role_arn: ${AWS_OIDC_ROLE_ARN}
-          dockerfile: Dockerfile
-          push_image: true
-          repo: ${AWS_ECR_REPO}
+      - aws-ecr/ecr_login: 
           region: us-west-2
-          tag: << parameters.image_tag >>
+            #tag: << parameters.image_tag >>
           
   credential-setup:
     executor: aws-cli/default
@@ -63,7 +56,7 @@ workflows:
           filters:
             branches:
               only: main
-      - build-docker-image: 
+      - build-and-push-docker-image: 
           requires: 
             - credential-setup
           context: Test
@@ -77,7 +70,7 @@ workflows:
           filters:
             branches:
               ignore: main
-      - build-docker-image: 
+      - build-and-push-docker-image: 
           requires: 
             - credential-setup
           image_tag: << pipeline.git.branch >>
