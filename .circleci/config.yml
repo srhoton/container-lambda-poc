@@ -8,10 +8,7 @@ jobs:
       image_tag:
         type: string
         default: latest
-    docker:
-      - image: circleci/ruby:latest
-          #machine:
-          #image: ubuntu-2204:2022.07.1
+    executor: aws-cli/default
     steps:
       - aws-ecr/build_image: 
         #attach_workspace: true
@@ -67,6 +64,8 @@ workflows:
             branches:
               only: main
       - build-docker-image: 
+          requires: 
+            - credential-setup
           context: Test
           filters:
             branches:
@@ -79,6 +78,8 @@ workflows:
             branches:
               ignore: main
       - build-docker-image: 
+          requires: 
+            - credential-setup
           image_tag: << pipeline.git.branch >>
           context: Dev
           filters:
