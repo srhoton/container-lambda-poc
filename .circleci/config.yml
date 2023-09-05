@@ -1,7 +1,20 @@
 version: '2.1'
 orbs: 
   aws-cli: circleci/aws-cli@4.1.0
+  aws-ecr: circleci/aws-ecr@9.0.0
 jobs:
+  build-docker-image: 
+    machine:
+      image: ubuntu-2004:202101-01
+    steps:
+      - aws-ecr/build_and_push_image: 
+          attach_workspace: true
+          auth: 
+            - aws-cli/setup: 
+                role_arn: ${AWS_OIDC_ROLE_ARN}
+          dockerfile: Dockerfile
+          push_image: true
+          repo: ${AWS_ECR_REPO}
   credential-setup:
     executor: aws-cli/default
     steps:
@@ -44,6 +57,11 @@ workflows:
           filters:
             branches:
               only: main
+      - build-docker-image: 
+          context: Test
+          filters:
+            branches:
+              only: main
   on-branch-created-or-updated:
     jobs:
       - credential-setup: 
@@ -51,6 +69,11 @@ workflows:
           filters:
             branches:
               ignore: main
+      - build-docker-image: 
+          context: Dev
+          filters:
+            branches:
+              only: main
   on-tag:
     jobs:
       - credential-setup: 
