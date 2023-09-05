@@ -3,26 +3,20 @@ orbs:
   aws-cli: circleci/aws-cli@4.1.0
   aws-ecr: circleci/aws-ecr@9.0.0
 jobs:
-  build-and-push-docker-image: 
+  build-and-push-docker-image:
     parameters:
-      image_tag:
+      tag:
         type: string
-        default: latest
+        default: "latest"
+    machine: 
+      image: ubuntu-2204:2023.07.2
     steps:
-      - aws-ecr/build_and_push_image:
-          account_id: 874500785305
-          auth:
-            - aws-cli/setup:
-                profile: OIDC-ECR
-                role_arn: ${AWS_OIDC_ROLE_ARN}
-          dockerfile: Dockerfile
-          executors: base
-          path: .
-            #platform: linux/amd64
-          region: us-west-2
-          push_image: true
-          tag: << parameters.image_tag >>
-          
+      aws-ecr/build_and_push_image:
+        repo: "container-lambda-poc"
+        tag: << parameters.tag >>
+        profile-name: cli-access
+        dockerfile: Dockerfile
+        path: .
   credential-setup:
     executor: aws-cli/default
     steps:
