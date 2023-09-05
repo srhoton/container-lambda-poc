@@ -1,4 +1,4 @@
-FROM httpbin:latest
+FROM kennethreitz/httpbin
 
 LABEL name="httpbin"
 LABEL version="0.9.2"
