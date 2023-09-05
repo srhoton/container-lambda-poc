@@ -81,7 +81,7 @@ workflows:
           context: Dev
           filters:
             branches:
-              only: main
+              ignore: main
   on-tag:
     jobs:
       - credential-setup: 
