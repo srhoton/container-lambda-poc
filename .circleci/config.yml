@@ -13,7 +13,7 @@ jobs:
     steps:
       - aws-ecr/build_and_push_image:
           repo: "container-lambda-poc"
-          tag: << parameters.tag >>
+          tag: << parameters.image_tag >>
             #profile-name: ecr-access
           dockerfile: Dockerfile
           path: .
