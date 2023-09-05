@@ -11,11 +11,11 @@ jobs:
     machine:
       image: ubuntu-2004:202101-01
     steps:
-      - aws-ecr/build_and_push_image: 
+      - aws-ecr/build_image: 
           attach_workspace: true
-          auth: 
-            - aws-cli/setup: 
-                role_arn: ${AWS_OIDC_ROLE_ARN}
+            #auth: 
+            #- aws-cli/setup: 
+            #    role_arn: ${AWS_OIDC_ROLE_ARN}
           dockerfile: Dockerfile
           push_image: true
           repo: ${AWS_ECR_REPO}
