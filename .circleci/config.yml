@@ -5,7 +5,7 @@ orbs:
 jobs:
   build-and-push-docker-image:
     parameters:
-      tag:
+      image_tag:
         type: string
         default: "latest"
     machine: 
