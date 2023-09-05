@@ -8,14 +8,14 @@ jobs:
       image: ubuntu-2004:202101-01
     steps:
       - aws-ecr/build_and_push_docker_image: 
-        attach_workspace: true
-        auth: 
-          - aws-cli/setup: 
-              role_arn: ${AWS_OIDC_ROLE_ARN}
-              aws-region: us-west-2
-        dockerfile: Dockerfile
-        executors: branches
-        push_image: false
+          attach_workspace: true
+          auth: 
+            - aws-cli/setup: 
+                role_arn: ${AWS_OIDC_ROLE_ARN}
+                aws-region: us-west-2
+          dockerfile: Dockerfile
+          executors: branches
+          push_image: false
   credential-setup:
     executor: aws-cli/default
     steps:
