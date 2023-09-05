@@ -12,7 +12,6 @@ jobs:
           auth: 
             - aws-cli/setup: 
                 role_arn: ${AWS_OIDC_ROLE_ARN}
-                aws-region: us-west-2
           dockerfile: Dockerfile
           executors: branches
           push_image: false
