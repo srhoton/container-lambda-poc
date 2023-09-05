@@ -14,12 +14,14 @@ jobs:
       - aws-ecr/build_and_push_image:
           repo: "container-lambda-poc"
           tag: << parameters.image_tag >>
-            #profile-name: ecr-access
+          profile_name: ecr-access
           dockerfile: Dockerfile
           path: .
           auth:
             - aws-cli/setup:
                 role_arn: ${AWS_OIDC_ROLE_ARN}
+                region: us-west-2
+                profile_name: ecr-access
   credential-setup:
     executor: aws-cli/default
     steps:
