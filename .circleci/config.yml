@@ -18,8 +18,9 @@ jobs:
           dockerfile: Dockerfile
           path: .
           auth:
-            profile: ecr-access
-            role_arn: ${AWS_OIDC_ROLE_ARN}
+            - aws-cli/setup:
+                profile: ecr-access
+                role_arn: ${AWS_OIDC_ROLE_ARN}
   credential-setup:
     executor: aws-cli/default
     steps:
