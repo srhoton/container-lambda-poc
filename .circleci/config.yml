@@ -9,7 +9,7 @@ jobs:
         type: string
         default: latest
     machine:
-      image: ubuntu-2004:202101-01
+      image: ubuntu-2204:2022.07.1
     steps:
       - aws-ecr/build_image: 
         #attach_workspace: true
