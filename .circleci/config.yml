@@ -8,6 +8,8 @@ jobs:
       image_tag:
         type: string
         default: latest
+    docker:
+      - image: circleci/ruby:latest
           #machine:
           #image: ubuntu-2204:2022.07.1
     steps:
