@@ -11,7 +11,7 @@ jobs:
     executor: aws-cli/default
     steps:
       - aws-ecr/ecr_login: 
-          account_id: 874500785305
+          account_id: "874500785305"
           profile_name: cli-access
           region: us-west-2
 
