@@ -15,6 +15,7 @@ jobs:
           dockerfile: Dockerfile
           executors: branches
           push_image: false
+          repo: ${AWS_ECR_REPO}
   credential-setup:
     executor: aws-cli/default
     steps:
