@@ -47,7 +47,7 @@ jobs:
             cd application
             terraform init -input=false ||  terraform workspace select "${TF_VAR_env_name}"
             terraform init -input=false -upgrade
-            terraform plan 
+            terraform plan -var "image_uri=${image_uri}" -input=false
 
 workflows:
   on-merge-to-main:
@@ -68,7 +68,7 @@ workflows:
       - apply-feature:
           requires:
             - build-and-push-docker-image
-          image_uri: "foo"
+          image_uri: "${ECR_REPO_URL}:${pipeline.git.branch}"
           context: Dev
           filters:
             branches:
