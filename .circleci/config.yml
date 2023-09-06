@@ -52,8 +52,6 @@ workflows:
   on-merge-to-main:
     jobs:
       - build-and-push-docker-image: 
-          requires: 
-            - credential-setup
           context: Test
           filters:
             branches:
@@ -61,16 +59,12 @@ workflows:
   on-branch-created-or-updated:
     jobs:
       - build-and-push-docker-image: 
-          requires: 
-            - credential-setup
           image_tag: << pipeline.git.branch >>
           context: Dev
           filters:
             branches:
               ignore: main
       - apply-feature:
-          requires:
-            - build-and-push-docker-image
           image_uri: "foo"
           context: Dev
           filters:
@@ -79,8 +73,6 @@ workflows:
   on-tag:
     jobs:
       - build-and-push-docker-image: 
-          requires: 
-            - credential-setup
           image_tag: << pipeline.git.tag >>
           context: Stage
           filters:
