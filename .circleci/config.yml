@@ -45,14 +45,15 @@ jobs:
           name: terraform init and plan
           command: |
             cd application
+            IMAGE_URI="<< parameters.image_uri >>"
             printenv
             export TF_WORKSPACE="${TF_VAR_env_name}"
             terraform init -input=false
             #echo "Image: << parameters.image_uri >>"
-            echo "Image: $parameters.image_uri"
-            echo "image_uri=${image_uri}" > terraform.auto.tfvars
+            echo "Image: ${IMAGE_URI}"
+            echo "image_uri=${IMAGE_URI}" > terraform.auto.tfvars
             cat terraform.auto.tfvars
-            terraform plan -var "image_uri=${image_uri}" -input=false
+            terraform plan -input=false
 
 workflows:
   on-merge-to-main:
