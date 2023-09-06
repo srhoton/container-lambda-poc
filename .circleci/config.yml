@@ -12,7 +12,7 @@ jobs:
       image: ubuntu-2204:2023.07.2
     steps:
       - aws-ecr/build_and_push_image:
-          account_id: "874500785305"
+          account_id: ${AWS_ACCOUNT_ID}
           repo: "container-lambda-poc"
           tag: << parameters.image_tag >>
           profile_name: ecr-access
@@ -24,26 +24,15 @@ jobs:
                 role_arn: ${AWS_OIDC_ROLE_ARN}
                 region: us-west-2
                 profile_name: ecr-access
-  credential-setup:
-    executor: aws-cli/default
-    steps:
-      - checkout
-      - aws-cli/setup:
-          profile_name: cli-access
-          role_arn: ${AWS_OIDC_ROLE_ARN}
-          region: us-west-2
-      - run: 
-          name: check-login
-          command: | 
-            aws sts get-caller-identity
   apply-feature:
+    parameters:
+      image_uri:
+        type: string
+        default: "874500785305.dkr.ecr.us-west-2.amazonaws.com/container-lambda-poc:l"
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
       - checkout
-      - aws-cli/setup:
-          role_arn: ${AWS_OIDC_ROLE_ARN}
-          aws-region: us-west-2
       - attach_workspace:
           at: /tmp/workspace
       - run:
@@ -53,44 +42,43 @@ jobs:
             apk upgrade
             apk add bash
       - run:
-          name: terraform init
+          name: terraform init and plan
           command: |
-            terraform workspace select ${TF_VAR_env_name}
+            cd application
+            export TF_WORKSPACE=dev
+            #terraform init -input=false ||  terraform workspace select "${TF_VAR_env_name}"
             terraform init -input=false
+            echo "Got here"
+            terraform plan -var "image_uri=${image_uri}" -input=false
 
 workflows:
   on-merge-to-main:
     jobs:
-      - credential-setup: 
-          context: Test
-          filters:
-            branches:
-              only: main
       - build-and-push-docker-image: 
-          requires: 
-            - credential-setup
           context: Test
           filters:
             branches:
               only: main
   on-branch-created-or-updated:
     jobs:
-      - credential-setup: 
+      - build-and-push-docker-image: 
+          image_tag: << pipeline.git.branch >>
           context: Dev
           filters:
             branches:
               ignore: main
-      - build-and-push-docker-image: 
-          requires: 
-            - credential-setup
-          image_tag: << pipeline.git.branch >>
+      - apply-feature:
+          requires:
+            - build-and-push-docker-image
+          image_uri: "${ECR_REPO_URL}:${pipeline.git.branch}"
           context: Dev
           filters:
             branches:
               ignore: main
   on-tag:
     jobs:
-      - credential-setup: 
+      - build-and-push-docker-image: 
+          image_tag: << pipeline.git.tag >>
           context: Stage
           filters:
             branches:
