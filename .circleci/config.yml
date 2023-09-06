@@ -46,13 +46,11 @@ jobs:
           command: |
             cd application
             export TF_WORKSPACE="${TF_VAR_env_name}"
-            #terraform init -input=false ||  terraform workspace select "${TF_VAR_env_name}"
             terraform init -input=false
-            echo "Image: << parameters.image_uri >>"
-              #echo "Image: ${parameters.image_uri}"
+            #echo "Image: << parameters.image_uri >>"
+            echo "Image: $parameters.image_uri"
             echo "image_uri=${image_uri}" > terraform.auto.tfvars
             cat terraform.auto.tfvars
-            #terraform plan -var "image_uri=${image_uri}" -input=false
             terraform plan -var "image_uri=${image_uri}" -input=false
 
 workflows:
