@@ -42,14 +42,10 @@ jobs:
             apk upgrade
             apk add bash
       - run:
-          name: terraform init
+          name: terraform init and plan
           command: |
             cd application
             terraform init -input=false ||  terraform workspace select "${TF_VAR_env_name}"
-      - run:
-          name: terraform plan
-          command: |
-            cd application
             terraform plan 
 
 workflows:
