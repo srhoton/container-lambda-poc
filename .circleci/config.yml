@@ -12,7 +12,7 @@ jobs:
       image: ubuntu-2204:2023.07.2
     steps:
       - aws-ecr/build_and_push_image:
-          account_id: "874500785305"
+          account_id: ${AWS_ACCOUNT_ID}
           repo: "container-lambda-poc"
           tag: << parameters.image_tag >>
           profile_name: ecr-access
@@ -24,19 +24,11 @@ jobs:
                 role_arn: ${AWS_OIDC_ROLE_ARN}
                 region: us-west-2
                 profile_name: ecr-access
-  credential-setup:
-    executor: aws-cli/default
-    steps:
-      - checkout
-      - aws-cli/setup:
-          profile_name: cli-access
-          role_arn: ${AWS_OIDC_ROLE_ARN}
-          region: us-west-2
-      - run: 
-          name: check-login
-          command: | 
-            aws sts get-caller-identity
   apply-feature:
+    parameters:
+      image_uri:
+        type: string
+        default: "874500785305.dkr.ecr.us-west-2.amazonaws.com/container-lambda-poc:l"
     docker:
       - image: docker.mirror.hashicorp.services/hashicorp/terraform:light
     steps:
@@ -55,17 +47,13 @@ jobs:
       - run:
           name: terraform init
           command: |
-            terraform workspace select ${TF_VAR_env_name}
+            cd application
             terraform init -input=false
+            terraform workspace select ${TF_VAR_env_name}
 
 workflows:
   on-merge-to-main:
     jobs:
-      - credential-setup: 
-          context: Test
-          filters:
-            branches:
-              only: main
       - build-and-push-docker-image: 
           requires: 
             - credential-setup
@@ -75,11 +63,6 @@ workflows:
               only: main
   on-branch-created-or-updated:
     jobs:
-      - credential-setup: 
-          context: Dev
-          filters:
-            branches:
-              ignore: main
       - build-and-push-docker-image: 
           requires: 
             - credential-setup
@@ -88,9 +71,20 @@ workflows:
           filters:
             branches:
               ignore: main
+      - apply-feature:
+          requires:
+            - build-and-push-docker-image
+          image_uri: "foo"
+          context: Dev
+          filters:
+            branches:
+              ignore: main
   on-tag:
     jobs:
-      - credential-setup: 
+      - build-and-push-docker-image: 
+          requires: 
+            - credential-setup
+          image_tag: << pipeline.git.tag >>
           context: Stage
           filters:
             branches:
