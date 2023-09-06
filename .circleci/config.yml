@@ -65,6 +65,8 @@ workflows:
             branches:
               ignore: main
       - apply-feature:
+        requires:
+          - build-and-push-docker-image
           image_uri: "foo"
           context: Dev
           filters:
