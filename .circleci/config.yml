@@ -45,6 +45,7 @@ jobs:
           name: terraform init and plan
           command: |
             cd application
+            printenv
             export TF_WORKSPACE="${TF_VAR_env_name}"
             terraform init -input=false
             #echo "Image: << parameters.image_uri >>"
