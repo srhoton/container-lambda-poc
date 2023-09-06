@@ -51,7 +51,7 @@ jobs:
             terraform init -input=false
             #echo "Image: << parameters.image_uri >>"
             echo "Image: ${IMAGE_URI}"
-            echo -e "image_uri=${ECR_REPO_URL}:foo\n" > terraform.auto.tfvars
+            echo -e "image_uri=\"${ECR_REPO_URL}:foo\"\n" > terraform.auto.tfvars
             cat terraform.auto.tfvars
             terraform plan -input=false
 
