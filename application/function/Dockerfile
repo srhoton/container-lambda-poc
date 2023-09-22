@@ -1,7 +1,7 @@
 FROM ruby:3.2
 
 # Install the runtime interface client for Ruby
-RUN gem install aws_lambda_ric
+#RUN gem install aws_lambda_ric
 
 # Add the runtime interface client to the PATH
 ENV PATH="/usr/local/bundle/bin:${PATH}"
