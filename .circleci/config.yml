@@ -19,6 +19,8 @@ jobs:
           dockerfile: Dockerfile
           path: application/function
           build_path: application/function
+          extra_build_args: 
+            - "platform=linux/amd64"
           region: us-west-2
           auth:
             - aws-cli/setup:
