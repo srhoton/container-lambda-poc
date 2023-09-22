@@ -18,7 +18,7 @@ COPY lambda_function.rb ${LAMBDA_TASK_ROOT}/
 COPY Gemfile Gemfile.lock ${LAMBDA_TASK_ROOT}/
 
 # Install Bundler and the specified gems
-RUN gem install bundler && bundle  install
+RUN gem install bundler:2.4.6 && bundle  install
 
 
 # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
