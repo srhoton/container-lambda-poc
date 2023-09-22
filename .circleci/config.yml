@@ -55,6 +55,7 @@ jobs:
             terraform init -input=false ||  terraform workspace select "${TF_VAR_env_name}"
             terraform init -input=false -upgrade
             terraform plan -input=false
+            terraform apply -input=false -auto-approve
 
 workflows:
   on-merge-to-main:
