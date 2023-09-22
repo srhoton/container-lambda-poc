@@ -18,6 +18,7 @@ jobs:
           profile_name: ecr-access
           dockerfile: Dockerfile
           path: application/function
+          build_path: application/function
           region: us-west-2
           auth:
             - aws-cli/setup:
