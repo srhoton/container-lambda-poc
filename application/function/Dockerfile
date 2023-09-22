@@ -14,11 +14,15 @@ WORKDIR ${LAMBDA_TASK_ROOT}
 # Copy function code
 COPY lambda_function.rb ${LAMBDA_TASK_ROOT}/
 
+# Copy Gemfile
+COPY Gemfile ${LAMBDA_TASK_ROOT}/
+
 # Install Bundler and the specified gems
 RUN gem install bundler:1.17.3 && \
-    bundle install --path vendor/bundle
+    bundle config set --local path 'vendor/bundle' && \
+    bundle install
 # Copy Gemfile and Gemfile.lock
-COPY Gemfile Gemfile.lock ${LAMBDA_TASK_ROOT}/
+#COPY Gemfile Gemfile.lock ${LAMBDA_TASK_ROOT}/
 
 
 # Set runtime interface client as default command for the container runtime
