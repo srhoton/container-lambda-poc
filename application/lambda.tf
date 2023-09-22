@@ -25,7 +25,4 @@ resource "aws_lambda_function" "test_lambda" {
   #image_uri     = var.image_uri
   role          = aws_iam_role.iam_for_lambda.arn
   function_name = "test_lambda"
-  image_config {
-    command = ["handlers.lambda_handler"]
-  }
 }
