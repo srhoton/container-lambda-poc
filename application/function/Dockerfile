@@ -12,10 +12,10 @@ RUN mkdir -p ${LAMBDA_TASK_ROOT}
 WORKDIR ${LAMBDA_TASK_ROOT}
 
 # Copy function code
-COPY lambda_function.rb ${LAMBDA_TASK_ROOT}/
+COPY ./lambda_function.rb ${LAMBDA_TASK_ROOT}/
 
 # Copy Gemfile
-COPY Gemfile ${LAMBDA_TASK_ROOT}/
+COPY ./Gemfile ${LAMBDA_TASK_ROOT}/
 
 # Install Bundler and the specified gems
 RUN gem install bundler:1.17.3 && \
