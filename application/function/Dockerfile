@@ -14,6 +14,8 @@ WORKDIR ${LAMBDA_TASK_ROOT}
 # Copy function code
 COPY lambda_function.rb ${LAMBDA_TASK_ROOT}/
 
+# Install gems
+RUN bundle install
 # Copy Gemfile and Gemfile.lock
 COPY Gemfile Gemfile.lock ${LAMBDA_TASK_ROOT}/
 
