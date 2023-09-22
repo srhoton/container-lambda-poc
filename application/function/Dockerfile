@@ -1,4 +1,4 @@
-FROM ruby:3.2
+FROM public.ecr.aws/lambda/ruby:3.2
 
 # Install the runtime interface client for Ruby
 #RUN gem install aws_lambda_ric
