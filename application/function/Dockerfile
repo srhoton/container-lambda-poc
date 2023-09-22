@@ -4,12 +4,12 @@ FROM public.ecr.aws/lambda/ruby:3.2
 #RUN gem install aws_lambda_ric
 
 # Add the runtime interface client to the PATH
-ENV PATH="/usr/local/bundle/bin:${PATH}"
+#ENV PATH="/usr/local/bundle/bin:${PATH}"
 
 # Create a directory for the Lambda function
-ENV LAMBDA_TASK_ROOT=/var/task
-RUN mkdir -p ${LAMBDA_TASK_ROOT}
-WORKDIR ${LAMBDA_TASK_ROOT}
+#ENV LAMBDA_TASK_ROOT=/var/task
+#RUN mkdir -p ${LAMBDA_TASK_ROOT}
+#WORKDIR ${LAMBDA_TASK_ROOT}
 
 # Copy function code
 COPY lambda_function.rb ${LAMBDA_TASK_ROOT}/
@@ -18,13 +18,8 @@ COPY lambda_function.rb ${LAMBDA_TASK_ROOT}/
 COPY Gemfile Gemfile.lock ${LAMBDA_TASK_ROOT}/
 
 # Install Bundler and the specified gems
-RUN gem install bundler:1.17.3 && \
-    bundle config set --local path 'vendor/bundle' && \
-    bundle install
+RUN gem install bundler && bundle  install
 
-
-# Set runtime interface client as default command for the container runtime
-ENTRYPOINT [ "aws_lambda_ric" ]
 
 # Set the CMD to your handler (could also be done as a parameter override outside of the Dockerfile)
 CMD [ "lambda_function.LambdaFunction::Handler.process" ]
