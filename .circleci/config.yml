@@ -19,7 +19,7 @@ jobs:
           dockerfile: Dockerfile
           path: application/function
           build_path: application/function
-          extra_build_args: "--platform linux/amd64 --provenance=false"
+          extra_build_args: "--platform linux/arm64 --provenance=false"
           region: us-west-2
           auth:
             - aws-cli/setup:
