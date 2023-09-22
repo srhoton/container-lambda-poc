@@ -2,7 +2,7 @@ terraform {
   backend "remote" {
     organization = "sprhoto"
     workspaces {
-      prefix = "container-lambda-poc--"
+      prefix = "container-lambda-poc-"
     }
   }
   required_providers {
